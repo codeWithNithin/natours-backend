@@ -1,42 +1,100 @@
-function getAllTours(req, res) {
-  res.status(501).json({
-    status: 'failed',
-    message: 'This route Not implemented!!!'
-  });
+const { TourModel } = require("../models");
+
+exports.getAllTours = async (req, res, next) => {
+  try {
+    const tours = await TourModel.find({});
+    res.status(200).json({
+      status: 'success',
+      results: tours.length,
+      data: {
+        tours
+      }
+    })
+  } catch (err) {
+    res.status(404).json({
+      status: 'fail',
+      message: err
+    })
+  }
 }
 
-function getTour(req, res) {
-  res.status(501).json({
-    status: 'failed',
-    message: 'This route Not implemented!!!'
-  });
+exports.getTour = async (req, res) => {
+  try {
+    const tour = await TourModel.findById(req.params.id);
+
+    if (!tour) {
+      return res.status(404).json({
+        status: 'fail',
+        message: `Invalid tour id`
+      })
+    }
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        tour
+      }
+    })
+  } catch (err) {
+    res.status(404).json({
+      status: 'fail',
+      message: err
+    })
+  }
 }
 
-function createTour(req, res) {
-  res.status(501).json({
-    status: 'failed',
-    message: 'This route Not implemented!!!'
-  });
+exports.createTour = async (req, res) => {
+  try {
+    const newTour = await TourModel.create(req.body)
+
+    res.status(201).json({
+      status: 'success',
+      data: {
+        tour: newTour
+      }
+    })
+
+  } catch (err) {
+    res.status(404).json({
+      status: 'fail',
+      message: err
+    })
+  }
 }
 
-function updateTour(req, res) {
-  res.status(501).json({
-    status: 'failed',
-    message: 'This route Not implemented!!!'
-  });
+exports.updateTour = async (req, res) => {
+  try {
+
+    const options = { new: true, runValidators: true }
+
+    const updatedTour = await TourModel.findByIdAndUpdate(req.params.id, req.body, options);
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        tour: updatedTour
+      }
+    })
+
+  } catch (err) {
+    res.status(404).json({
+      status: 'fail',
+      message: err
+    })
+  }
 }
 
-function deleteTour(req, res) {
-  res.status(501).json({
-    status: 'failed',
-    message: 'This route Not implemented!!!'
-  });
-}
-
-module.exports = {
-  getAllTours,
-  getTour,
-  createTour,
-  updateTour,
-  deleteTour
+exports.deleteTour = async (req, res) => {
+  try {
+    await TourModel.findByIdAndDelete(req.body.id)
+    res.status(204).json({
+      status: 'success',
+      data: null
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: 'fail',
+      message: err
+    })
+  }
 }
