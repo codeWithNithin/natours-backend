@@ -82,7 +82,8 @@ exports.protect = async (req, res, next) => {
       })
     }
 
-    req.user = decoded;
+    const freshUser = await UserModel.findById(decoded.id);
+    req.user = freshUser;
     next()
   } catch (err) {
 
