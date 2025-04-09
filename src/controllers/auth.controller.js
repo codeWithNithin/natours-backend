@@ -2,7 +2,6 @@ const { UserModel } = require("../models")
 const jwt = require('jsonwebtoken')
 
 
-
 exports.signup = async (req, res, next) => {
   try {
     const { name, email, password, passwordConfirm } = req.body
