@@ -3,6 +3,8 @@ const { tourController } = require('../controllers');
 
 const tourRoutes = express.Router();
 
+tourRoutes.get('/top-5-cheap', tourController.aliasTopTours, tourController.getAllTours);
+
 tourRoutes
   .route('/')
   .get(tourController.getAllTours)
